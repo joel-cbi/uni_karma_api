@@ -2,10 +2,10 @@ class KarmaController < ApplicationController
   before_action :set_users, only: [:give_karma]
 
   def give_karma
-    puts "PARAMS:\n\n#{karma_params}\n\n#{params}"
-    @delta = Karma.give(@giver, @receiver, @karma)
+    @karmic_object = Karma.new(@giver, @receiver)
+    @karmic_response = @karmic_object.give(@giver, @receiver, @karma)
     @history = History.create(giver: @giver, receiver: @receiver, karma: @karma)
-    render json: @delta
+    render json: @karmic_response
   end
 
   def show_karma
@@ -28,7 +28,7 @@ class KarmaController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def karma_params
-    params.require(:karma).permit(:slack_id_giver, :slack_id_receiver, :slack_name_giver, :slack_name_receiver, :karma)
+    params.require(:karma).permit(:slack_id_giver, :slack_id_receiver, :karma)
   end
 
 end

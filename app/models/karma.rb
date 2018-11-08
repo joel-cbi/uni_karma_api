@@ -1,36 +1,44 @@
 class Karma
+  attr_accessor :delta_giver, :delta_receiver, :total_giver, :total_receiver, :id_giver, :id_receiver, :giver, :receiver, :karma
 
-  def self.give(giver, receiver, karma)
-    karma = karma.to_f
-    karma_delta = {}
-    if karma > 0
-      karma_delta[receiver.slack_id] = self.add(receiver, karma)
+  def initialize(giver, receiver)
+    @giver = giver
+    @receiver = receiver
+    @id_giver = @giver.id
+    @id_receiver = @receiver.id
+    @delta_giver = 0.0
+  end
+
+  def give(giver, receiver, karma)
+    @karma = karma.to_f
+    @delta_receiver = @karma
+    if @karma > 0
+      add(receiver, @karma)
     else
-      karmic_response = self.subtract(giver, receiver, karma)
-      karma_delta[receiver.slack_id] = karmic_response[:receiver]
-      karma_delta[giver.slack_id] = karmic_response[:giver]
+      subtract(giver, receiver, @karma)
     end
-    return karma_delta
+    return self
   end
 
-  def self.add(receiver, karma)
-    self.apply(receiver, karma)
+  def add(receiver, karma)
+    @total_receiver = apply(receiver, karma)
+    @total_giver = unicornize(@giver.karma)
   end
 
-  def self.subtract(giver, receiver, karma)
-    receiver_delta = receiver_delta = self.apply(receiver, karma)
-    giver_delta = self.apply(giver, karma * 0.2)
-    return {receiver: receiver_delta, giver: giver_delta}
+  def subtract(giver, receiver, karma)
+    @total_receiver = apply(receiver, karma)
+    @total_giver = apply(giver, karma * 0.2)
+    @delta_giver = karma * 0.2
   end
 
-  def self.apply(user, karma)
+  def apply(user, karma)
     user.karma += karma
     if user.save
-      return self.unicornize(user.karma)
+      return unicornize(user.karma)
     end
   end
 
-  def self.unicornize(karma)
+  def unicornize(karma)
     case karma.abs
     when 1...1000
       "#{karma} Billion"
