@@ -2,6 +2,7 @@ class KarmaController < ApplicationController
   before_action :set_users, only: [:give_karma]
 
   def give_karma
+    puts "PARAMS:\n\n#{karam_params}\n\n"
     @delta = Karma.give(@giver, @receiver, @karma)
     @history = History.create(giver: @giver, receiver: @receiver, karma: @karma)
     render json: @delta
@@ -20,8 +21,8 @@ class KarmaController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_users
-    @giver = User.where(slack_id: karma_params[:slack_id_giver], slack_name: karma_params[:slack_name_giver]).first_or_create
-    @receiver = User.where(slack_id: karma_params[:slack_id_receiver], slack_name: karma_params[:slack_name_receiver]).first_or_create
+    @giver = User.where(slack_id: karma_params[:slack_id_giver]).first_or_create
+    @receiver = User.where(slack_id: karma_params[:slack_id_receiver]).first_or_create
     @karma = karma_params[:karma]
   end
 
