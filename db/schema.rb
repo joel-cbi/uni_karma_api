@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_08_190902) do
+ActiveRecord::Schema.define(version: 2018_11_08_214512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2018_11_08_190902) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer "slack_id"
+    t.string "slack_id"
     t.string "slack_name"
     t.float "karma", default: 0.0
     t.datetime "created_at", null: false
