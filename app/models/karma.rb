@@ -4,7 +4,7 @@ class Karma
     karma = karma.to_f
     karma_delta = {}
     if karma > 0
-      karma_delta[receiver.slack_name] = self.add(receiver, karma)
+      karma_delta[receiver.slack_id] = self.add(receiver, karma)
     else
       karmic_response = self.subtract(giver, receiver, karma)
       karma_delta[receiver.slack_id] = karmic_response[:receiver]
