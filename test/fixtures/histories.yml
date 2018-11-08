@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  giver_id: 
+  receiver_id: 
+  karma: 1.5
+  description: MyString
+
+two:
+  giver_id: 
+  receiver_id: 
+  karma: 1.5
+  description: MyString
