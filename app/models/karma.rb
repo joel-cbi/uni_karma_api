@@ -4,8 +4,8 @@ class Karma
   def initialize(giver, receiver)
     @giver = giver
     @receiver = receiver
-    @id_giver = @giver.id
-    @id_receiver = @receiver.id
+    @id_giver = @giver.slack_id
+    @id_receiver = @receiver.slack_id
     @delta_giver = 0.0
   end
 
