@@ -7,8 +7,8 @@ class Karma
       karma_delta[receiver.slack_name] = self.add(receiver, karma)
     else
       karmic_response = self.subtract(giver, receiver, karma)
-      karma_delta[receiver.slack_name] = karmic_response[:receiver]
-      karma_delta[giver.slack_name] = karmic_response[:giver]
+      karma_delta[receiver.slack_id] = karmic_response[:receiver]
+      karma_delta[giver.slack_id] = karmic_response[:giver]
     end
     return karma_delta
   end
