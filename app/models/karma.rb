@@ -49,7 +49,7 @@ class Karma
     when String
       "You passed a string"
     else
-      "#{karma} Billion"
+      "#{number_with_precision(karma, precision: 2)} Billion"
     end
   end
 
