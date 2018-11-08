@@ -2,7 +2,7 @@ class KarmaController < ApplicationController
   before_action :set_users, only: [:give_karma]
 
   def give_karma
-    puts "PARAMS:\n\n#{karam_params}\n\n"
+    puts "PARAMS:\n\n#{karma_params}\n\n#{params}"
     @delta = Karma.give(@giver, @receiver, @karma)
     @history = History.create(giver: @giver, receiver: @receiver, karma: @karma)
     render json: @delta
