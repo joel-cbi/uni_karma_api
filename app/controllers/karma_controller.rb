@@ -8,7 +8,7 @@ class KarmaController < ApplicationController
       @history = History.create(giver: @giver, receiver: @receiver, karma: @karma)
       render json: @karmic_response.sanitize_json
     else
-      render json: {}, status: 401
+      render json: {message: 'Not Authorized. Please include {Authorization: <API_TOKEN> in request header}'}, status: 401
     end
   end
 
@@ -17,7 +17,7 @@ class KarmaController < ApplicationController
       @karmas = User.all.select(:slack_id, :karma)
       render json: @karmas
     else
-      render json: {}, status: 401
+      render json: {message: 'Not Authorized. Please include {Authorization: <API_TOKEN> in request header}'}, status: 401
     end
   end
 
