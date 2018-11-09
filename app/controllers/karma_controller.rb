@@ -2,15 +2,23 @@ class KarmaController < ApplicationController
   before_action :set_users, only: [:give_karma]
 
   def give_karma
-    @karmic_object = Karma.new(@giver, @receiver)
-    @karmic_response = @karmic_object.give(@karma)
-    @history = History.create(giver: @giver, receiver: @receiver, karma: @karma)
-    render json: @karmic_response.sanitize_json
+    if authenticate
+      @karmic_object = Karma.new(@giver, @receiver)
+      @karmic_response = @karmic_object.give(@karma)
+      @history = History.create(giver: @giver, receiver: @receiver, karma: @karma)
+      render json: @karmic_response.sanitize_json
+    else
+      render json: {}, status: :unauthorised
+    end
   end
 
   def show_karma
-    @karmas = User.all.select(:slack_name, :karma).map{ |user| {slack_name: user.slack_name, karma: Karma.unicornize(user.karma)}}
-    render json: @karmas
+    if authenticate
+      @karmas = User.all.select(:slack_id, :karma)
+      render json: @karmas
+    else
+      render json: {}, status: :unauthorised
+    end
   end
 
   def show_history
@@ -29,6 +37,11 @@ class KarmaController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def karma_params
     params.require(:karma).permit(:slack_id_giver, :slack_id_receiver, :karma)
+  end
+
+  def authenticate
+    auth_header = request.headers['Authorization']
+    JsonWebToken.decode(auth_header) == ENV['API_TOKEN_PAYLOAD']
   end
 
 end
