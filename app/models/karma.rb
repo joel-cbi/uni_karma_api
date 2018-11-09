@@ -9,25 +9,25 @@ class Karma
     @delta_giver = 0.0
   end
 
-  def give(giver, receiver, karma)
+  def give(karma)
     @karma = karma.to_f
     @delta_receiver = @karma
     if @karma > 0
-      add(receiver, @karma)
+      add(@karma)
     else
-      subtract(giver, receiver, @karma)
+      subtract(@karma)
     end
     return self
   end
 
-  def add(receiver, karma)
-    @total_receiver = apply(receiver, karma)
-    @total_giver = unicornize(@giver.karma)
+  def add(karma)
+    @total_receiver = apply(@receiver, karma)
+    @total_giver = apply(@giver, 0)
   end
 
-  def subtract(giver, receiver, karma)
-    @total_receiver = apply(receiver, karma)
-    @total_giver = apply(giver, karma * 0.2)
+  def subtract(karma)
+    @total_receiver = apply(@receiver, karma)
+    @total_giver = apply(@giver, karma * 0.2)
     @delta_giver = karma * 0.2
   end
 
@@ -42,15 +42,22 @@ class Karma
     case karma.abs
     when 1...1000
       "#{karma.round(2)} Billion"
-    when 1000...1000000
+    when 1001...1000000
       "#{karma.round(2)} Trillion"
-    when 1000000...1000000000
+    when 1000001...1000000000
       "#{karma.round(2)} Quadrillion"
     when String
       "You passed a string"
     else
       "#{karma.round(2)} Billion"
     end
+  end
+
+  def sanitize_json
+    sanitized = self
+    sanitized.giver = self.id_giver
+    sanitized.receiver = self.id_receiver
+    sanitized
   end
 
 end

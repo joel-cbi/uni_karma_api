@@ -3,9 +3,9 @@ class KarmaController < ApplicationController
 
   def give_karma
     @karmic_object = Karma.new(@giver, @receiver)
-    @karmic_response = @karmic_object.give(@giver, @receiver, @karma)
+    @karmic_response = @karmic_object.give(@karma)
     @history = History.create(giver: @giver, receiver: @receiver, karma: @karma)
-    render json: @karmic_response
+    render json: @karmic_response.sanitize_json
   end
 
   def show_karma
