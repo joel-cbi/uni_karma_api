@@ -25,6 +25,34 @@ class KarmaController < ApplicationController
     render json: History.all
   end
 
+  def show_leaderboard
+    if authenticate
+      @i = 0
+      @winners = User.all.select(:slack_id, :karma).order("karma DESC").limit(5)
+      @texts = "*Top #{@winners.length}*\n"
+      while @i < @winners.length
+        @texts += serialize_leaderboard_row(@i+1, @winners[@i].slack_id, @winners[@i].karma)
+        @i += 1
+      end
+
+      @i = 0
+      @losers = User.all.select(:slack_id, :karma).order("karma ASC").limit(5)
+      @texts += "*Bottom #{@losers.length}*\n"
+      while @i < @losers.length
+        @texts += serialize_leaderboard_row(@i+1, @losers[@i].slack_id, @losers[@i].karma)
+        @i += 1
+      end
+
+      render json: {"text": @texts, "mrkdwn": true}
+    else
+      render json: {message: 'Not Authorized. API_TOKEN missing'}, status: 401
+    end
+  end
+
+  def serialize_leaderboard_row(rownum, slack_id, karma_value)
+    return "\t#{ rownum}. <@#{slack_id}> with #{karma_value} karma.\n"
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -36,7 +64,22 @@ class KarmaController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def karma_params
-    params.require(:karma).permit(:slack_id_giver, :slack_id_receiver, :karma)
+    params.require(:karma).permit(:slack_id_giver,
+                                  :slack_id_receiver,
+                                  :karma,
+                                  :token,
+                                  :team_id,
+                                  :team_domain,
+                                  :enterprise_id,
+                                  :enterprise_name,
+                                  :channel_id,
+                                  :channel_name,
+                                  :user_id,
+                                  :user_name,
+                                  :command,
+                                  :text,
+                                  :response_url,
+                                  :trigger_id)
   end
 
   def authenticate
