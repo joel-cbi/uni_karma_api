@@ -1,5 +1,6 @@
 class KarmaController < ApplicationController
   before_action :set_users, only: [:give_karma]
+  before_action :set_slack, only: [:show_leaderboard, :show_friends, :show_foes]
 
   def give_karma
     if authenticate
@@ -25,6 +26,64 @@ class KarmaController < ApplicationController
     render json: History.all
   end
 
+  def show_leaderboard
+    @i = 0
+    @winners = User.all.select(:slack_id, :karma).order("karma DESC").limit(5)
+    @texts = "*Top #{@winners.length}*\n"
+    while @i < @winners.length
+      @texts += serialize_leaderboard_row(@i+1, @winners[@i].slack_id, @winners[@i].karma)
+      @i += 1
+    end
+
+    @i = 0
+    @losers = User.all.select(:slack_id, :karma).order("karma ASC").limit(5)
+    @texts += "*Bottom #{@losers.length}*\n"
+    while @i < @losers.length
+      @texts += serialize_leaderboard_row(@i+1, @losers[@i].slack_id, @losers[@i].karma)
+      @i += 1
+    end
+
+    render json: {"text": @texts, "mrkdwn": true}
+  end
+
+  def show_friends
+
+    @i = 0
+    @friends = History.all.where(receiver_id: @user_id).group(:giver_id).select("giver_id, sum(karma) as karma").order("karma DESC").limit(5)
+    @text = "*Top #{@friends.length} friends*\n"
+    if @friends.length == 0
+      @text = "You don't have any friends"
+    else
+      while @i < @friends.length
+        @text += serialize_leaderboard_row(@i+1, @friends[@i].giver_id, @friends[@i].karma)
+        @i += 1
+      end
+    end
+
+    render json: {"text": @text, "mrkdwn": true}
+  end
+
+  def show_foes
+
+    @i = 0
+    @foes = History.all.where(receiver_id: @user_id).group(:giver_id).select("giver_id, sum(karma) as karma").order("karma").limit(5)
+    @text = "*Top #{@foes.length} foes*\n"
+    if @foes.length == 0
+      @text = "You don't have any foes"
+    else
+      while @i < @foes.length
+        @text += serialize_leaderboard_row(@i+1, @foes[@i].giver_id, @foes[@i].karma)
+        @i += 1
+      end
+    end
+
+    render json: {"text": @text, "mrkdwn": true}
+  end
+
+  def serialize_leaderboard_row(rownum, slack_id, karma_value)
+    return "\t#{ rownum}. <@#{slack_id}> with #{karma_value} karma.\n"
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -34,9 +93,32 @@ class KarmaController < ApplicationController
     @karma = karma_params[:karma]
   end
 
+  def set_slack
+    @slack_id = slack_params[:user_id]
+    @user_id = User.where(slack_id: @slack_id).first_or_create
+  end
+
+  def slack_params
+    params.permit(:token,
+                  :team_id,
+                  :team_domain,
+                  :enterprise_id,
+                  :enterprise_name,
+                  :channel_id,
+                  :channel_name,
+                  :user_id,
+                  :user_name,
+                  :command,
+                  :text,
+                  :response_url,
+                  :trigger_id)
+  end
+
   # Only allow a trusted parameter "white list" through.
   def karma_params
-    params.require(:karma).permit(:slack_id_giver, :slack_id_receiver, :karma)
+    params.require(:karma).permit(:slack_id_giver,
+                                  :slack_id_receiver,
+                                  :karma)
   end
 
   def authenticate
