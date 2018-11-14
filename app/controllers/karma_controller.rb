@@ -55,7 +55,7 @@ class KarmaController < ApplicationController
       @text = "You don't have any friends"
     else
       while @i < @friends.length
-        @tmp_id = User.where(id: @friends[@i].giver_id).first
+        @tmp_id = User.where(id: @friends[@i].giver_id).first.slack_id
         @text += serialize_leaderboard_row(@i+1, @tmp_id, @friends[@i].karma)
         @i += 1
       end
@@ -73,7 +73,7 @@ class KarmaController < ApplicationController
       @text = "You don't have any foes"
     else
       while @i < @foes.length
-        @tmp_id = User.where(id: @foes[@i].giver_id).first
+        @tmp_id = User.where(id: @foes[@i].giver_id).first.slack_id
         @text += serialize_leaderboard_row(@i+1, @tmp_id, @foes[@i].karma)
         @i += 1
       end
