@@ -43,7 +43,7 @@ class KarmaController < ApplicationController
       @i += 1
     end
 
-    render json: {"text": @texts, "mrkdwn": true}
+    render json: {"text": @texts, "mrkdwn": true, "response_type": "in_channel"}
   end
 
   def show_friends
@@ -60,7 +60,7 @@ class KarmaController < ApplicationController
       end
     end
 
-    render json: {"text": @text, "mrkdwn": true}
+    render json: {"text": @text, "mrkdwn": true, "response_type": "in_channel"}
   end
 
   def show_foes
@@ -77,7 +77,7 @@ class KarmaController < ApplicationController
       end
     end
 
-    render json: {"text": @text, "mrkdwn": true}
+    render json: {"text": @text, "mrkdwn": true, "response_type": "in_channel"}
   end
 
   def serialize_leaderboard_row(rownum, slack_id, karma_value)
