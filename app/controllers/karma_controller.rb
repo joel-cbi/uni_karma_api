@@ -51,9 +51,13 @@ class KarmaController < ApplicationController
     @i = 0
     @friends = History.all.where(receiver_id: @user_id).group(:giver_id).select("giver_id, sum(karma) as karma").order("karma DESC").limit(5)
     @text = "*Top #{@friends.length} friends*\n"
-    while @i < @friends.length
-      @text += serialize_leaderboard_row(@i+1, @friends[@i].giver_id, @friends[@i].karma)
-      @i += 1
+    if @friends.length == 0
+      @text = "You don't have any friends"
+    else
+      while @i < @friends.length
+        @text += serialize_leaderboard_row(@i+1, @friends[@i].giver_id, @friends[@i].karma)
+        @i += 1
+      end
     end
 
     render json: {"text": @text, "mrkdwn": true}
@@ -64,9 +68,13 @@ class KarmaController < ApplicationController
     @i = 0
     @foes = History.all.where(receiver_id: @user_id).group(:giver_id).select("giver_id, sum(karma) as karma").order("karma").limit(5)
     @text = "*Top #{@foes.length} foes*\n"
-    while @i < @foes.length
-      @text += serialize_leaderboard_row(@i+1, @foes[@i].giver_id, @foes[@i].karma)
-      @i += 1
+    if @foes.length == 0
+      @text = "You don't have any foes"
+    else
+      while @i < @foes.length
+        @text += serialize_leaderboard_row(@i+1, @foes[@i].giver_id, @foes[@i].karma)
+        @i += 1
+      end
     end
 
     render json: {"text": @text, "mrkdwn": true}
