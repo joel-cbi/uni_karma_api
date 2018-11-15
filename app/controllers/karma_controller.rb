@@ -56,7 +56,7 @@ class KarmaController < ApplicationController
     else
       while @i < @friends.length
         @tmp_id = User.where(id: @friends[@i].giver_id).first.slack_id
-        @text += serialize_leaderboard_row(@i+1, @tmp_id, Karma.unicornize(@friends[@i].karma))
+        @text += serialize_friend_foe_row(@i+1, @tmp_id, Karma.unicornize(@friends[@i].karma))
         @i += 1
       end
     end
@@ -74,7 +74,7 @@ class KarmaController < ApplicationController
     else
       while @i < @foes.length
         @tmp_id = User.where(id: @foes[@i].giver_id).first.slack_id
-        @text += serialize_leaderboard_row(@i+1, @tmp_id, Karma.unicornize(@foes[@i].karma))
+        @text += serialize_friend_foe_row(@i+1, @tmp_id, Karma.unicornize(@foes[@i].karma))
         @i += 1
       end
     end
@@ -84,6 +84,10 @@ class KarmaController < ApplicationController
 
   def serialize_leaderboard_row(rownum, slack_id, karma_value)
     return "\t#{ rownum}. <@#{slack_id}> with #{karma_value} karma.\n"
+  end
+
+  def serialize_friend_foe_row(rownum, slack_id, karma_value)
+    return "\t#{ rownum}. <@#{slack_id}> gave you #{karma_value} karma.\n"
   end
 
   private
