@@ -14,7 +14,7 @@ class KarmaController < ApplicationController
   end
 
   def show_karma
-    @karma_value = User.all.select(:slack_id, :karma)
+    @karma_value = User.all.select(:slack_id, :karma).first.karma
     @texts = "You have #{@karma_value} karma"
     render json: {"text": @texts, "mrkdwn": true, "response_type": "in_channel"}
   end
