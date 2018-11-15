@@ -39,7 +39,7 @@ class Karma
   def apply(user, karma)
     user.karma += karma
     if user.save
-      return self.unicornize(user.karma)
+      return Karma.unicornize(user.karma)
     end
   end
 
