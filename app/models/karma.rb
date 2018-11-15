@@ -53,7 +53,7 @@ class Karma
     when String
       "You passed a string"
     else
-      "#{karma.round} Billion"
+      "#{karma.round.number_with_delimiter} Billion"
     end
   end
 
