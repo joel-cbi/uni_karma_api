@@ -47,19 +47,13 @@ class Karma
   end
 
   def self.unicornize(karma)
-    case karma.abs
+    case karma.round.abs
     when 0
       "0"
-    when 1...1000
-      "#{karma.round} Billion"
-    when 1001...1000000
-      "#{karma.round} Trillion"
-    when 1000001...1000000000
-      "#{karma.round} Quadrillion"
     when String
       "You passed a string"
     else
-      "#{karma.round} Billion"
+      "#{karma.round.number_with_delimiter} Billion"
     end
   end
 
