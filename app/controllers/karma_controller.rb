@@ -14,13 +14,9 @@ class KarmaController < ApplicationController
   end
 
   def show_karma
-    if authenticate
-      @karma_value = User.all.select(:slack_id, :karma)
-      @texts = "You have #{@karma_value} karma"
-      render json: {"text": @texts, "mrkdwn": true, "response_type": "in_channel"}
-    else
-      render json: {message: 'Not Authorized. API_TOKEN missing'}, status: 401
-    end
+    @karma_value = User.all.select(:slack_id, :karma)
+    @texts = "You have #{@karma_value} karma"
+    render json: {"text": @texts, "mrkdwn": true, "response_type": "in_channel"}
   end
 
   def show_history
