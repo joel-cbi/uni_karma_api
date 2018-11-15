@@ -17,7 +17,7 @@ class KarmaController < ApplicationController
     @karma_value = User.where(slack_id: @slack_id).select(:karma).first.karma
     @unicornized_karma = Karma.unicornize(@karma_value)
     @texts = "You have #{@unicornized_karma} karma"
-    render json: {"text": @texts, "mrkdwn": true, "response_type": "in_channel"}
+    render json: {"text": @texts, "mrkdwn": true, "response_type": "ephemeral"}
   end
 
   def show_history
