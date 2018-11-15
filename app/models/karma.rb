@@ -39,11 +39,11 @@ class Karma
   def apply(user, karma)
     user.karma += karma
     if user.save
-      return unicornize(user.karma)
+      return self.unicornize(user.karma)
     end
   end
 
-  def unicornize(karma)
+  def self.unicornize(karma)
     case karma.abs
     when 1...1000
       "#{karma.round(2)} Billion"

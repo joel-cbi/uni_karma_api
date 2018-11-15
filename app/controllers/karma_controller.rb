@@ -31,7 +31,7 @@ class KarmaController < ApplicationController
     @winners = User.all.select(:slack_id, :karma).order("karma DESC").limit(5)
     @texts = "*Top #{@winners.length}*\n"
     while @i < @winners.length
-      @texts += serialize_leaderboard_row(@i+1, @winners[@i].slack_id, @winners[@i].karma)
+      @texts += serialize_leaderboard_row(@i+1, @winners[@i].slack_id, Karma.unicornize(@winners[@i].karma))
       @i += 1
     end
 
@@ -39,7 +39,7 @@ class KarmaController < ApplicationController
     @losers = User.all.select(:slack_id, :karma).order("karma ASC").limit(5)
     @texts += "*Bottom #{@losers.length}*\n"
     while @i < @losers.length
-      @texts += serialize_leaderboard_row(@i+1, @losers[@i].slack_id, @losers[@i].karma)
+      @texts += serialize_leaderboard_row(@i+1, @losers[@i].slack_id, Karma.unicornize(@losers[@i].karma))
       @i += 1
     end
 
@@ -56,7 +56,7 @@ class KarmaController < ApplicationController
     else
       while @i < @friends.length
         @tmp_id = User.where(id: @friends[@i].giver_id).first.slack_id
-        @text += serialize_leaderboard_row(@i+1, @tmp_id, @friends[@i].karma)
+        @text += serialize_leaderboard_row(@i+1, @tmp_id, Karma.unicornize(@friends[@i].karma))
         @i += 1
       end
     end
