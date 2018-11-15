@@ -48,6 +48,8 @@ class Karma
 
   def self.unicornize(karma)
     case karma.abs
+    when 0
+      "0"
     when 1...1000
       "#{karma.round} Billion"
     when 1001...1000000
