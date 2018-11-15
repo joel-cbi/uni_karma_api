@@ -27,8 +27,13 @@ class Karma
 
   def subtract(karma)
     @total_receiver = apply(@receiver, karma)
-    @total_giver = apply(@giver, karma * 0.2)
-    @delta_giver = karma * 0.2
+    if @receiver != @giver
+      @total_giver = apply(@giver, karma * 0.2)
+      @delta_giver = karma * 0.2
+    else
+      @total_giver = 0
+      @delta_giver = 0
+    end
   end
 
   def apply(user, karma)
