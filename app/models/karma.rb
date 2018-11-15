@@ -49,15 +49,15 @@ class Karma
   def self.unicornize(karma)
     case karma.abs
     when 1...1000
-      "#{karma.round()} Billion"
+      "#{karma.round} Billion"
     when 1001...1000000
-      "#{karma.round()} Trillion"
+      "#{karma.round} Trillion"
     when 1000001...1000000000
-      "#{karma.round()} Quadrillion"
+      "#{karma.round} Quadrillion"
     when String
       "You passed a string"
     else
-      "#{karma.round()} Billion"
+      "#{karma.round} Billion"
     end
   end
 
