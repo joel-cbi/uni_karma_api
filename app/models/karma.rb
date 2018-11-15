@@ -28,8 +28,11 @@ class Karma
   def subtract(karma)
     @total_receiver = apply(@receiver, karma)
     if @receiver != @giver
-      @total_giver = apply(@giver, karma * 0.2)
-      @delta_giver = karma * 0.2
+      penalty = 0.2
+      delta = karma * penalty
+      rounded_int_delta = delta>0 ? delta.ceil : delta.floor
+      @total_giver = apply(@giver, rounded_int_delta)
+      @delta_giver = rounded_int_delta
     else
       @total_giver = 0
       @delta_giver = 0
@@ -46,15 +49,15 @@ class Karma
   def self.unicornize(karma)
     case karma.abs
     when 1...1000
-      "#{karma.round(2)} Billion"
+      "#{karma.round()} Billion"
     when 1001...1000000
-      "#{karma.round(2)} Trillion"
+      "#{karma.round()} Trillion"
     when 1000001...1000000000
-      "#{karma.round(2)} Quadrillion"
+      "#{karma.round()} Quadrillion"
     when String
       "You passed a string"
     else
-      "#{karma.round(2)} Billion"
+      "#{karma.round()} Billion"
     end
   end
 
