@@ -47,13 +47,13 @@ class Karma
   end
 
   def self.unicornize(karma)
-    case karma.round.abs
+    case karma.abs
     when 0
       "0"
     when String
       "You passed a string"
     else
-      "#{karma.round.number_with_delimiter} Billion"
+      "#{karma.round} Billion"
     end
   end
 
