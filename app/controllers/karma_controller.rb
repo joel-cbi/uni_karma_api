@@ -74,7 +74,7 @@ class KarmaController < ApplicationController
     else
       while @i < @foes.length
         @tmp_id = User.where(id: @foes[@i].giver_id).first.slack_id
-        @text += serialize_leaderboard_row(@i+1, @tmp_id, @foes[@i].karma)
+        @text += serialize_leaderboard_row(@i+1, @tmp_id, Karma.unicornize(@foes[@i].karma))
         @i += 1
       end
     end
