@@ -1,6 +1,6 @@
 class KarmaController < ApplicationController
   before_action :set_users, only: [:give_karma]
-  before_action :set_slack, only: [:show_leaderboard, :show_friends, :show_foes]
+  before_action :set_slack, only: [:show_leaderboard, :show_friends, :show_foes, :show_karma]
 
   def give_karma
     if authenticate
