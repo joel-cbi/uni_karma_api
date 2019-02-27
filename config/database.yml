@@ -75,11 +75,12 @@ test:
 #
 # You can use this database configuration with:
 #
-production:
-  url: <%= ENV['DB_URL'] %>
-
 # production:
-#   <<: *default
-#   database: karma
-#   username: karma-bot
-#   password: <%= ENV['UNI_KARMA_DATABASE_PASSWORD'] %>
+#   url: <%= ENV['DB_URL'] %>
+
+production:
+  <<: *default
+  database: karma
+  username: karma-bot
+  host: <%= ENV['DB_HOST'] %>
+  password: <%= ENV['UNI_KARMA_DATABASE_PASSWORD'] %>
