@@ -83,4 +83,5 @@ production:
   database: karma
   username: karma-bot
   host: <%= ENV['DB_HOST'] %>
+  port: 5452
   password: <%= ENV['UNI_KARMA_DATABASE_PASSWORD'] %>
