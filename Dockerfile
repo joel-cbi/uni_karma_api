@@ -28,7 +28,7 @@ COPY . ./
 
 # Expose port 50051 to the Docker host, so we can access it
 # from the outside.
-EXPOSE 50051
+EXPOSE 3000
 
 # The main command to run when the container starts. Also
 # tell the Rails dev server to bind to all interfaces by
