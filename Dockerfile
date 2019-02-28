@@ -30,6 +30,8 @@ COPY . ./
 # from the outside.
 EXPOSE 50051
 
+ENV PORT=50051
+
 # The main command to run when the container starts. Also
 # tell the Rails dev server to bind to all interfaces by
 # default.
